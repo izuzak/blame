@@ -1,0 +1,24 @@
+columns
+- foo, bar, baz
+
+column.foo
+- type: builtin, user
+- name
+- value
+- width
+- style
+- max width
+- min width
+- justify: left, right, center
+
+values: author.email, author.name, time, age, ...
+
+runtime
+- show which columns to show
+- predefined columns (predefined names and values)
+- config columns
+
+Struct:
+
+ColumnDef
+-

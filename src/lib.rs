@@ -15,3 +15,6 @@ pub mod handler;
 
 /// File blame module.
 pub mod file_blame;
+
+/// Column definition.
+pub mod column_def;

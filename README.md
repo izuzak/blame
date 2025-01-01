@@ -59,7 +59,6 @@ Keyboard navigation:
 
 - Write tests.
 - Publish the project on crates.io.
-- Show message when trying to navigate to a parent commit when there's no parent.
 - Show stack of commits navigated through to reach current commit.
 - Indicator for how recent a line's commit was, e.g. by color or some character.
 - Jump to a line by number.

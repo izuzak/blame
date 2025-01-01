@@ -36,7 +36,11 @@ where
 /// Renders the user interface widgets.
 pub fn render(app: &mut App, frame: &mut Frame) {
     let rects = Layout::default()
-        .constraints([Constraint::Percentage(100)])
+        .direction(Direction::Vertical)
+        .constraints(vec![
+            Constraint::Min(5),
+            Constraint::Length(3),
+        ])
         .split(frame.size());
 
     let selected_style = Style::default().bg(Color::from_str("#3f3f3f").unwrap());
@@ -80,6 +84,19 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         )))
         .highlight_style(selected_style);
     frame.render_stateful_widget(t, rects[0], &mut app.state);
+
+    frame.render_widget(
+        Paragraph::new(message(&app))
+            .block(Block::new().borders(Borders::ALL).title("Status").border_type(BorderType::Double)),
+        rects[1]);
+}
+
+fn message(app: &App) -> &str {
+  if app.message.is_some() {
+    return app.message.as_ref().unwrap();
+  }
+
+  return "";
 }
 
 // Creates a table row for a blame line and the previous line's commit sha

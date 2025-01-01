@@ -3,6 +3,8 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
+    app.message = None;
+
     match key_event.code {
         // Exit application on `ESC` or `q`
         KeyCode::Esc | KeyCode::Char('q') => {

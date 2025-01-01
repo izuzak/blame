@@ -22,6 +22,7 @@ pub struct App {
     pub commit_stack: Vec<String>,
     pub load_err: Option<FileBlameError>,
     pub columns: Vec<Column>,
+    pub message: Option<String>,
 }
 
 // Column definition including the column width, style, and header name.
@@ -50,6 +51,7 @@ impl App {
             commit_stack: Vec::new(),
             load_err: None,
             running: true,
+            message: None,
             columns: vec![
                 // All columns have fixed width except the last one which is for the contents.
                 // The last column will take up the remaining width of the table.
@@ -261,13 +263,15 @@ impl App {
 
         // If the commit doesn't have a parent (i.e it's the initial commit), or if the file
         // didn't exist at the parent commit, then we can't show the blame at the parent commit.
-        if commit_context.parent_commit_sha.is_none()
-            || !FileBlame::exists_at_commit(
-                &self.file_path,
-                commit_context.parent_commit_sha.as_ref().unwrap(),
-            )
-        {
+        if commit_context.parent_commit_sha.is_none() {
+            self.message = Some("Can't navigate to parent commit: no parent commit for selected commit.".to_string());
             return;
+        } else if !FileBlame::exists_at_commit(
+            &self.file_path,
+            commit_context.parent_commit_sha.as_ref().unwrap(),
+        ) {
+            self.message = Some("Can't navigate to parent commit: file doesn't exist at parent of selected commit.".to_string());
+            return
         }
 
         self.commit_stack.push(self.commit_sha.clone());
@@ -282,6 +286,8 @@ impl App {
     pub fn previous_commit(&mut self) {
         if let Some(sha) = self.commit_stack.pop() {
             self.load_blame(self.file_path.clone(), sha)
+        } else {
+            self.message = Some("Can't navigate back to previously visited commit: already at initially opened commit.".to_string());
         }
     }
 }
